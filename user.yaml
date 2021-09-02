@@ -1,0 +1,19 @@
+---
+- name: User playbook
+  hosts: amazon
+  become: true
+  become_method: sudo
+  tasks: 
+  - name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
+    ansible.builtin.user:
+      name: johnd
+      comment: John Doe
+      group: wheel
+      
+...
+
+
+# bash -c "$(curl https://bucket-to-check-aws-tasks.s3.amazonaws.com/AWS/scripts/shared_scripts/ansible_menu.sh)" 
+
+
+
