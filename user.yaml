@@ -4,7 +4,7 @@
   become: true
   become_method: sudo
   tasks: 
-  - name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
+  - name: Add list of users and a primary group of 'admin'
     ansible.builtin.user:
       name: "{{ item }}"
     with_items:
@@ -14,6 +14,10 @@
     - lisa
     - kate
      
+  - name: Ensure group "test" exists
+    ansible.builtin.group:
+      name: test
+      state: present
       
 ...
 
