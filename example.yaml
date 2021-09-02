@@ -1,7 +1,6 @@
 ---
 - name: Example playbook
   hosts: ubuntu
-  user: ubuntu
   become: true
   become_method: sudo
   tasks: 

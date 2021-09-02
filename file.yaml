@@ -1,0 +1,21 @@
+---
+- name: File playbook
+  hosts: all
+  become: true
+  become_method: sudo
+  tasks: 
+  - name: Change file ownership, group and permissions
+    ansible.builtin.file:
+      path: /etc/foo.conf
+      owner: ec2-user
+      group: ec2-user
+      mode: '0644'
+      state: touch
+    
+...
+
+
+# bash -c "$(curl https://bucket-to-check-aws-tasks.s3.amazonaws.com/AWS/scripts/shared_scripts/ansible_menu.sh)" 
+
+
+
