@@ -1,14 +1,19 @@
 ---
 - name: User playbook
-  hosts: amazon
+  hosts: all
   become: true
   become_method: sudo
   tasks: 
   - name: Add the user 'johnd' with a specific uid and a primary group of 'admin'
     ansible.builtin.user:
-      name: johnd
-      comment: John Doe
-      group: wheel
+      name: "{{ item }}"
+    with_items:
+    - johnd
+    - tom
+    - ben
+    - lisa
+    - kate
+     
       
 ...
 
