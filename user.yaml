@@ -16,8 +16,14 @@
      
   - name: Ensure group "test" exists
     ansible.builtin.group:
-      name: test
+      name: "{{ item }}"
       state: present
+    with_items:
+    - security
+    - admin
+    - marketing
+    - sales
+    - billing
       
 ...
 
