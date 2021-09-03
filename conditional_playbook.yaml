@@ -1,34 +1,55 @@
 ---
-- name: Conditional PLaybook
+- name: Conditional Playbook
   hosts: all
   become: true
   become_method: sudo
   tasks:
-  - name: Install package
-    package:
-      name: telnet
-      state: present
-      
-
-      # new block
   - name: Information
     ansible.builtin.debug: # ansible built in debug pull the information from the RM
       var: ansible_facts['distribution']
 
 
-  - name: Install webserver on Amazon/CentOS
-    when: ansible_facts['distribution'] == "amazon"
+  - name: Install webserver CentOS
+    when: ansible_facts['distribution'] == "Amazon"
     ansible.builtin.package:
       name: httpd
       state: present
+    notify: Restart webserver Amazon
 
 
   - name: Install webserver on Ubuntu
-    when: ansible_facts['distribution'] == "ubuntu"
+    when: ansible_facts['distribution'] == "Ubuntu"
     ansible.builtin.package:
       name: apache2
       state: present
+    notify: Restart webserver Ubuntu
 
-  - name: restart Ubuntu
-    when: ansible_facts['distribution'] == "ubuntu"
-    ansible.builtin.command: "reboot"
+  # - name: restart Ubuntu
+  #   when: ansible_facts['distribution'] == "ubuntu"
+  #   ansible.builtin.command: "reboot"
+  
+  
+  - name: Restart webserver on Ubuntu
+    when: ansible_facts['distribution'] == "Ubuntu"
+    systemd:
+      name: apache2
+      state: restarted
+  
+  handlers:
+  - name: Restart webserver on Amazon
+    when: ansible_facts['distribution'] == "Amazon"
+    systemd:
+      name: httpd
+      state: restarted
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
