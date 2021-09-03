@@ -4,8 +4,6 @@
   become: true
   become_method: sudo
   tasks: 
-  
-  
     # lines 2-6 ===> connection block: defines how we connect to the remote machine
   - name: Install multiple packages
     ansible.builtin.package: # here we use module called package, which allows to install apache2
@@ -19,7 +17,6 @@
 ...
 
 
-# bash -c "$(curl https://bucket-to-check-aws-tasks.s3.amazonaws.com/AWS/scripts/shared_scripts/ansible_menu.sh)" 
 
 
 
