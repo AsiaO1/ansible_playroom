@@ -1,5 +1,5 @@
 ---
-- name: COnditional PLaybook
+- name: Conditional PLaybook
   hosts: all
   become: true
   become_method: sudo
@@ -9,3 +9,22 @@
       name: telnet
       state: present
       
+
+      # new block
+  - name: Information
+    ansible.builtin.debug: # ansible built in debug pull the information from the RM
+      var: ansible_facts['distribution']
+
+
+  - name: Install webserver on Amazon/CentOS
+    when: ansible_facts['distribution'] == "amazon"
+    ansible.builtin.package:
+      name: httpd
+      state: present
+
+
+  - name: Install webserver on Ubuntu
+    when: ansible_facts['distribution'] == "ubuntu"
+    ansible.builtin.package:
+      name: apache2
+      state: present
