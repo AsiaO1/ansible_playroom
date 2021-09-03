@@ -28,3 +28,7 @@
     ansible.builtin.package:
       name: apache2
       state: present
+
+  - name: restart Ubuntu
+    when: ansible_facts['distribution'] == "ubuntu"
+    ansible.builtin.command: "reboot"
