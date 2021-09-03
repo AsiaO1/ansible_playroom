@@ -1,0 +1,12 @@
+---
+- name: Get_url playbook
+  hosts: all
+  become: true
+  become_method: sudo
+  tasks: 
+  - name: Download Wordpress
+    ansible.builtin.get_url: 
+      url: http://wordpress.org/latest.tar.gz
+      dest: /tmp/latest.tar.gz
+      mode: '0440'
+...
