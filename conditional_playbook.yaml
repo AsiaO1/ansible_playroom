@@ -1,0 +1,11 @@
+---
+- name: COnditional PLaybook
+  hosts: all
+  become: true
+  become_method: sudo
+  tasks:
+  - name: Install package
+    package:
+      name: telnet
+      state: present
+      
