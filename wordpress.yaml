@@ -53,7 +53,10 @@
     - ansible_facts['distribution'] == "Amazon"
     - ansible_facts['distribution_version'] == "2"
     systemd:
-      name: httpd
+      name: "{{ items}}"
       state: restarted
       enabled: true 
+    with_items:
+    - httpd
+    - crond
 

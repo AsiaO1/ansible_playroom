@@ -1,0 +1,40 @@
+---
+# tasks file for wordpress
+- name: Install prerequisites
+  when:
+  - ansible_facts['distribution'] == "Amazon"
+  - ansible_facts['distribution_version'] == "2"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - httpd
+  - php-{{ php_version }}
+  - php-mysql-{{ php_version }}
+  - telnet
+  notify: Start webserver
+
+- name: Pull Wordpress
+  when:
+    - ansible_facts['distribution'] == "Amazon"
+    - ansible_facts['distribution_version'] == "2"
+  get_url:
+    url: http://wordpress.org/wordpress-{{ wordpress_version }}.tar.gz
+    dest: /tmp/wordpress-{{ wordpress_version }}.tar.gz
+    mode: '0440'
+
+- name: Unzip Wordpress
+  when:
+      - ansible_facts['distribution'] == "Amazon"
+      - ansible_facts['distribution_version'] == "2"
+  unarchive:
+    src: /tmp/wordpress-{{ wordpress_version }}.tar.gz
+    dest: /var/www/html
+    remote_src: true
+
+- name: Move wordpress
+  when:
+      - ansible_facts['distribution'] == "Amazon"
+      - ansible_facts['distribution_version'] == "2"
+  shell: "cp -r /var/www/html/wordpress/* /var/www/html || exit 0"
+  ignore_errors: true

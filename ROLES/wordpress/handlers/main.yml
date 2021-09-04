@@ -1,0 +1,13 @@
+---
+# handlers file for wordpress
+  - name: Start webserver
+    when:
+    - ansible_facts['distribution'] == "Amazon"
+    - ansible_facts['distribution_version'] == "2"
+    systemd:
+      name: "{{ items}}"
+      state: restarted
+      enabled: true 
+    with_items:
+    - httpd
+    - crond
