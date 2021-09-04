@@ -16,3 +16,23 @@
     - php
     - php-mysql
     - telnet
+
+  - name: Pull Wordpress
+    when:
+      - ansible_facts['distribution'] == "Amazon"
+      - ansible_facts['distribution_version'] == "2"
+    get_url:
+      url: http://wordpress.org/wordpress-4.0.32.tar.gz
+      dest: /tmp/wordpress-4.0.32.tar.gz
+      mode: '0440'
+
+  - name: Unzip Wordpress
+    when:
+        - ansible_facts['distribution'] == "Amazon"
+        - ansible_facts['distribution_version'] == "2"
+    unarchive:
+      src: /tmp/wordpress-4.0.32.tar.gz
+      dest: /var/www/html
+      remote_src: true
+
+
