@@ -1,0 +1,13 @@
+- name: Download Wordpress
+  ignore_errors: true
+  ansible.builtin.get_url: 
+    url: http://wordpress.org/latest.tar.gz
+    dest: /tmp/latest.tar.gz
+    mode: '0440'
+
+- name: Unarchive wordpress
+  ignore_errors: true
+  ansible.builtin.unarchive: 
+    src: /tmp/latest.tar.gz
+    dest: /tmp/
+    remote_src: true    

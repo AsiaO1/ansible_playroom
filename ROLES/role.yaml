@@ -1,0 +1,7 @@
+---
+- name: execute role
+  hosts: localhost
+  become: true
+  become_method: sudo
+  roles:
+    - company-packages
