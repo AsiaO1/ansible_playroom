@@ -53,5 +53,11 @@
       map_public: true
       tags: "{{ aws_tags }}"
     register: public_subnet3
-    
-       
+
+  - name: Create Internet gateway with tags
+    community.aws.ec2_vpc_igw:
+      region: "{{ region }}"
+      vpc_id: "{{ Ansible.vpc.id }}"
+      state: "{{ state }}"
+      tags: "{{ aws_tags }}"
+    register: igw
