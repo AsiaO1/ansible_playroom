@@ -4,7 +4,7 @@
   become: true
   become_method: sudo
   vars:
-    wordpress_version:  "{{ 4.0.32 }}"
+    wordpress_version:  "4.0.32"
     php_version: "5.4.16"
     
   tasks:
@@ -20,6 +20,7 @@
     - php-{{ php_version }}
     - php-mysql-{{ php_version }}
     - telnet
+    notify: Start webserver
 
   - name: Pull Wordpress
     when:
@@ -46,6 +47,7 @@
     shell: "cp -r /var/www/html/wordpress/* /var/www/html || exit 0"
     ignore_errors: true
 
+  handlers:
   - name: Start webserver
     when:
     - ansible_facts['distribution'] == "Amazon"
