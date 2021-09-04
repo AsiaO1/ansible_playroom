@@ -3,6 +3,10 @@
   hosts: all
   become: true
   become_method: sudo
+  vars:
+    wordpress_version:  "{{ 4.0.32 }}"
+    php_version: "5.4.16"
+    
   tasks:
   - name: Install prerequisites
     when:
@@ -13,8 +17,8 @@
       state: present
     with_items:
     - httpd
-    - php
-    - php-mysql
+    - php-{{ php_version }}
+    - php-mysql-{{ php_version }}
     - telnet
 
   - name: Pull Wordpress
@@ -22,8 +26,8 @@
       - ansible_facts['distribution'] == "Amazon"
       - ansible_facts['distribution_version'] == "2"
     get_url:
-      url: http://wordpress.org/wordpress-4.0.32.tar.gz
-      dest: /tmp/wordpress-4.0.32.tar.gz
+      url: http://wordpress.org/wordpress-{{ wordpress_version }}.tar.gz
+      dest: /tmp/wordpress-{{ wordpress_version }}.tar.gz
       mode: '0440'
 
   - name: Unzip Wordpress
@@ -31,7 +35,7 @@
         - ansible_facts['distribution'] == "Amazon"
         - ansible_facts['distribution_version'] == "2"
     unarchive:
-      src: /tmp/wordpress-4.0.32.tar.gz
+      src: /tmp/wordpress-{{ wordpress_version }}.tar.gz
       dest: /var/www/html
       remote_src: true
 
@@ -39,7 +43,15 @@
     when:
         - ansible_facts['distribution'] == "Amazon"
         - ansible_facts['distribution_version'] == "2"
-    shell: "cp -r /var/www/html/wordpress/* /var/www/html"
+    shell: "cp -r /var/www/html/wordpress/* /var/www/html || exit 0"
     ignore_errors: true
 
+  - name: Start webserver
+    when:
+    - ansible_facts['distribution'] == "Amazon"
+    - ansible_facts['distribution_version'] == "2"
+    systemd:
+      name: httpd
+      state: restarted
+      enabled: true 
 
