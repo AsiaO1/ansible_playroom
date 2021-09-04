@@ -35,4 +35,11 @@
       dest: /var/www/html
       remote_src: true
 
+  - name: Move wordpress
+    when:
+        - ansible_facts['distribution'] == "Amazon"
+        - ansible_facts['distribution_version'] == "2"
+    shell: "cp -r /var/www/html/wordpress/* /var/www/html"
+    ignore_errors: true
+
 
