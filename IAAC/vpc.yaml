@@ -8,10 +8,50 @@
   tasks:
   - name: create a VPC with dedicated tenancy and a couple of tags
     amazon.aws.ec2_vpc_net:
-      name: Module_dev2
+      name: "{{vpc_name}}"
       cidr_block: "{{vpc_cidr_block}}"
       region: "{{ region }}"
       tags: "{{ aws_tags }}"
-      tenancy: default  
+      tenancy: "{{ vpc_tenancy }}"  
+      state: "{{ state }}"
     register: Ansible
-  
+  - name: Get value
+    debug:
+      var: Ansible.vpc.id
+
+
+  - name: Create subnet 1
+    amazon.aws.ec2_vpc_subnet:
+      state: "{{ state }}"
+      region: "{{ region }}"
+      vpc_id: "{{ Ansible.vpc.id }}"
+      cidr: "{{ public_subnet1_cidr }}"
+      az: "{{ region }}a"
+      map_public: true
+      tags: "{{ aws_tags }}"
+    register: public_subnet1
+
+
+  - name: Create subnet 2
+    amazon.aws.ec2_vpc_subnet:
+      state: "{{ state }}"
+      region: "{{ region }}"
+      vpc_id: "{{ Ansible.vpc.id }}"
+      cidr: "{{ public_subnet2_cidr }}"
+      az: "{{ region }}a"
+      map_public: true
+      tags: "{{ aws_tags }}"
+    register: public_subnet2
+
+  - name: Create subnet 3
+    amazon.aws.ec2_vpc_subnet:
+      state: "{{ state }}"
+      region: "{{ region }}"
+      vpc_id: "{{ Ansible.vpc.id }}"
+      cidr: "{{ public_subnet3_cidr }}"
+      az: "{{ region }}a"
+      map_public: true
+      tags: "{{ aws_tags }}"
+    register: public_subnet3
+    
+       
