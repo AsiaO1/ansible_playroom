@@ -3,7 +3,7 @@
   hosts: all
   tasks: 
   - name: Add list of users and a primary group of 'admin'
-    ansible.builtin.user:
+    user:
       name: johnd
       state: present
   
