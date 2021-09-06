@@ -2,6 +2,8 @@
 - name: Intalls R1soft agent
   become: true
   become_method: sudo
+  vars: 
+    r1soft_server_ip: 127.0.0.1
   tasks:
     - name: Create a repo
       when:

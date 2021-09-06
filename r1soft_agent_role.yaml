@@ -1,0 +1,7 @@
+---
+- name: Install agent with role
+  host: all
+  become: yes
+  become_method: sudo
+  role:
+  - r1soft-agent
