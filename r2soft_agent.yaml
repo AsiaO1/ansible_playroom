@@ -1,0 +1,50 @@
+---
+- name: Intalls R1soft agent
+  become: true
+  become_method: sudo
+  tasks:
+    - name: Create a repo
+      when:
+      - ansible_facts['distribution'] == "Ubuntu"
+      - ansible_facts['distribution_version'] == "16.04"
+      shell: |
+        echo deb http://repo.r1soft.com/apt stable main >> /etc/apt/sources.list
+        wget http://repo.r1soft.com/r1soft.asc
+        apt-key add r1soft.asc 
+
+    - name: Update repo
+      when:
+      - ansible_facts['distribution'] == "Ubuntu"
+      - ansible_facts['distribution_version'] == "16.04"
+      shell: |
+        apt-get update -y
+
+    - name: install r1soft agent
+      when:
+      - ansible_facts['distribution'] == "Ubuntu"
+      - ansible_facts['distribution_version'] == "16.04"
+      package: 
+        name: serverbackup-enterprise-agent   
+        state: present
+      notify:
+      - Start r1soft agent
+      - Install key
+
+    handlers:
+
+    - name: Start r1soft agent
+      when:
+        - ansible_facts['distribution'] == "Ubuntu"
+        - ansible_facts['distribution_version'] == "16.04"
+      systemd:
+        name: sbm-agent
+        state: restarted
+        enabled: true
+        
+    - name: Install key
+      when:
+      - ansible_facts['distribution'] == "Ubuntu"
+      - ansible_facts['distribution_version'] == "16.04"
+      shell: "r1soft-setup   --get-key   http://{{ r1soft_server_ip }}"
+
+      # ansible-playbook -e r1soft_server_ip="YOUR_SERVER_IP" r1soft-agent.yaml
