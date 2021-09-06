@@ -25,4 +25,11 @@
     state: present
   notify:
   - Start r1soft agent
-  - Install key
+  # - Install key
+
+      
+- name: Install key
+  when:
+  - ansible_facts['distribution'] == "Ubuntu"
+  - ansible_facts['distribution_version'] == "16.04"
+  shell: "r1soft-setup   --get-key   http://{{ r1soft_server_ip }}"
